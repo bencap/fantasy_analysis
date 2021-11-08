@@ -1,6 +1,6 @@
 # fantasy_analysis
 
-Using the Sleeper API to analyze our leagues' results. You can view an interactive version of these notebooks on the web on [Binder](https://hub.gke2.mybinder.org/user/bencap-fantasy_analysis-lr5m89ea/lab/workspaces/auto-5/tree/week8_analysus.ipynb). Most weeks I dive into a specific aspect of the week and try to analyze our fantasy league in a way that is deeper than the summary statistics provided on the league homepage.
+Using the Sleeper API to analyze our leagues' results. You can view an interactive version of these notebooks on the web on [Binder](https://mybinder.org/). Simply add the repository information after following the link and launch the server. Most weeks I dive into a specific aspect of the week and try to analyze our fantasy league in a way that is deeper than the summary statistics provided on the league homepage.
 
 To run these notebooks on your personal machine, first clone the repository into a directory of your choice. Then run 
 ```
