@@ -112,24 +112,25 @@ class Team(BaseApi):
         for player in self.players:
             player.set_par(player.points -
                            self.replacement_averages[player.pos])
-            
+
     def set_par_averages(self, par_averages: dict) -> None:
         self.replacement_averages = par_averages
 
     def set_paa_differentials(self) -> None:
         """set the paa value for every rostered player"""
         players = sorted(self.players, key=lambda p: p.points, reverse=True)
-        starters = [[None], [None, None], [None, None], [None], [None, None], [None], [None]]
-        
+        starters = [[None], [None, None], [None, None],
+                    [None], [None, None], [None], [None]]
+
         # this is long b/c we have to ensure we only set the starters
         # it's easiest conceptually if we just loop through the players by
-        # highest point total and fill in our optimal lineup based on 
+        # highest point total and fill in our optimal lineup based on
         # player positions and how many we can start
         for player in players:
             if player.pos == Position.QB:
                 if not starters[0]:
                     starters[0] = (player)
-                    player.set_paa(player.points - 
+                    player.set_paa(player.points -
                                    self.average_averages[player.pos])
             elif player.pos == Position.RB:
                 if not starters[1][0]:
@@ -188,27 +189,28 @@ class Team(BaseApi):
                     starters[6] = (player)
                     player.set_paa(player.points -
                                    self.average_averages[player.pos])
-                    
+
         self.expected_starters = [
             item for sublist in starters for item in sublist]
-                                
+
     def set_paa_averages(self, paa_averages: dict) -> None:
         self.average_averages = paa_averages
-        
+
+
 def main() -> None:
     our_league = League(10, "649912836461539328")
     players = Players(our_league)
 
     team = our_league.get_rosters()[0]
-    
+
     ben = Team(
         our_league.name_pairings[team["owner_id"]], team, our_league.matchups, players)
-    
+
     ben.set_paa_averages(players.average_averages)
     ben.set_par_averages(players.replacement_averages)
     ben.set_par_differentials()
     ben.set_paa_differentials()
-    
+
     print(ben)
 
 

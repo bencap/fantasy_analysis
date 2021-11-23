@@ -1,3 +1,4 @@
+from typing import Type
 from base_api import BaseApi
 from league import League
 from player import Player, Position
@@ -18,11 +19,13 @@ class Players(BaseApi):
         self.read(self.fp) if local else self._update()
         self._rosters = league.get_rosters()
 
+        # build the three player categories
         self.all_players = {}
         self.rostered_players = []
         self.waiver_players = []
         self.build_players()
 
+        # build replacement and average players for use by team class
         self.replacement_averages = {}
         self.average_averages = {}
         self.calculate_replacement_averages()
@@ -31,16 +34,17 @@ class Players(BaseApi):
     def _update(self) -> None:
         """updates all player data from sleeper api (slow)"""
         for num, player_id in enumerate(self.players_meta):
+            print(player_id)
             if num % 500 == 0:
                 print(
                     f"Done with player {num} out of {len(self.players_meta.keys())}")
 
-            pl = self._call(url="https://api.sleeper.app/stats/nfl/player/{}".format(player_id),
-                                  params={"season_type": "regular", "season": self.YEAR, "grouping": "season"})
+            player = self._call(url="https://api.sleeper.app/stats/nfl/player/{}".format(player_id),
+                                params={"season_type": "regular", "season": self.YEAR, "grouping": "season"})
 
             # None type responses are players without stats
-            if pl:
-                self.players_stats[player_id] = pl["stats"]
+            if player:
+                self.players_stats[player_id] = player["stats"]
 
         self.write(self.fp)
 
@@ -117,7 +121,6 @@ class Players(BaseApi):
             if position == position.RB or position == position.WR or position == position.FLEX:
                 self.average_averages[position] = (
                     sum(top_rostered[0:10]) / 10, sum(top_rostered[10:20]) / 10)
-                    
 
     def write(self, fp: str) -> None:
         """writes player data to a json file"""
@@ -132,8 +135,10 @@ class Players(BaseApi):
 
 def main():
     our_league = League(10, "649912836461539328")
-    #players = Players(our_league)
-    players = Players(our_league, local=False)
+    players = Players(our_league)
+    
+    # for updating the league stats
+    #players = Players(our_league, local=False)
     print(players.rostered_players)
 
 

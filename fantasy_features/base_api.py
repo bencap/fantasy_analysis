@@ -8,6 +8,7 @@ class BaseApi():
         try:
             result_json_string.raise_for_status()
         except requests.exceptions.HTTPError as e:
+            print(e)
             return e
 
         result = result_json_string.json()
