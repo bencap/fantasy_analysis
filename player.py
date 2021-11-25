@@ -1,18 +1,6 @@
 from base_api import BaseApi
-from league import League
+from positions import Position
 from dataclasses import dataclass
-import enum
-
-
-class Position(enum.Enum):
-    QB = enum.auto()
-    RB = enum.auto()
-    WR = enum.auto()
-    TE = enum.auto()
-    D = enum.auto()
-    K = enum.auto()
-    FLEX = enum.auto()
-
 
 @dataclass
 class Player(BaseApi):
@@ -65,8 +53,8 @@ class Player(BaseApi):
         elif pos == "TE":
             self.pos = Position.TE
         elif pos == "DEF":
-            self.pos = Position.D
-        else:
+            self.pos = Position.DEF
+        elif pos == "K":
             self.pos = Position.K
 
     def is_flex(self):
